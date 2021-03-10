@@ -1,24 +1,27 @@
 CC=clang
 
 DEBUG = -DDEBUG
-CFLAGS= -g -Wall
+CFLAGS= -g -Wall -I ./include
 
-all: clean sr_tunnel buffer
+all: bin clean sr_tunnel buffer
 
 sr_tunnel: sr_tunnel.o util.o sr_buffer.o network.o
-	${CC} ${CFLAGS} $(^) -o sr_tunnel
+	${CC} ${CFLAGS} $(patsubst %,./bin/%,$(^)) -o bin/$@
 
-buffer: sr_buffer.o util.o test_buffer.c
-	${CC} ${CFLAGS} $(^) -o buffer
+buffer: sr_buffer.o util.o test_buffer.o
+	${CC} ${CFLAGS} $(patsubst %,./bin/%,$(^)) -o bin/buffer
 
-%.o: %.c %.h
-	$(CC) -o $@ -c $< $(CFLAGS)
+%.o: src/%.c include/%.h
+	$(CC) -o bin/$@ -I include -c $< $(CFLAGS)
 
-%.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+%.o: src/%.c
+	$(CC) -o bin/$@ -I include -c $< $(CFLAGS)
 
 doc: Doxyfile
 	doxygen $(^)
 
+bin:
+	-mkdir -p bin
+
 clean:
-	-rm buffer sr_tunnel *.o
+	-rm bin/buffer bin/sr_tunnel bin/*.o
