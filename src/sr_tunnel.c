@@ -261,7 +261,6 @@ int main(int argc, char *argv[])
 	int seqnum = 1;
 	int left_win = 1;
 	int right_win = 1;
-	int max_win = 8;
 
 	stats.lw = left_win;
 	stats.rw = right_win;
@@ -289,7 +288,7 @@ int main(int argc, char *argv[])
 
 		if (FD_ISSET(tun_fd, &fdset)) {	/* There is something to read on tun_fd */
 
-			if (right_win < left_win + max_win) {	/* if we did not send the full window */
+			if (right_win < left_win + MAXWIN) {	/* if we did not send the full window */
 
 				l = read(tun_fd, buf, sizeof(buf));
 				if (l < 0)
@@ -312,7 +311,7 @@ int main(int argc, char *argv[])
 				stats.rw = right_win;
 			}
 
-			if (right_win == left_win + max_win) {	/* window full : retransmit non-acked packets in timeout */
+			if (right_win == left_win + MAXWIN) {	/* window full : retransmit non-acked packets in timeout */
 				window_not_full = false;
 
 				for (int i = left_win; i < right_win; i++) {

@@ -27,6 +27,7 @@
 #define SERVER 1
 #define PKT 12345
 #define ACK 54321
+#define MAXWIN 8	/**< maximum SR window */
 #define TIMEOUT 500	/**< timeout expressed in ms */
 
 /**
