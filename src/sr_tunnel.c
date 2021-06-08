@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
 					fprintf(fp,
 						"p %s:%i \tseqnum %d \tsize %d \tlw %d \trw %d \tnbb %d \tnba %d \tnbna %d\n",
 						inet_ntoa(sout.sin_addr),
-						ntohs(sout.sin_port), seqnum,
+						ntohs(sout.sin_port), data_pkt.seqnum,
 						data_pkt.length, stats.lw,
 						stats.rw, stats.nb_buffer,
 						stats.nb_acked,
@@ -370,7 +370,7 @@ int main(int argc, char *argv[])
 					fprintf(fp,
 						"a %s:%i \tacknum %d \tsize %d \tlw %d \trw %d \tnbb %d \tnba %d \tnbna %d\n",
 						inet_ntoa(sout.sin_addr),
-						ntohs(sout.sin_port), seqnum, l,
+						ntohs(sout.sin_port), data_pkt.seqnum, l,
 						stats.lw, stats.rw,
 						stats.nb_buffer, stats.nb_acked,
 						stats.nb_nonacked);
