@@ -92,6 +92,10 @@ void usage(void)
 	fprintf(stderr,
 		"-p <port>: port to listen on (if run in server mode) or to connect to (in client mode), default 30001\n");
 	fprintf(stderr,
+		"-w <windowSize>: maximum size of the sending window, default 8\n");
+	fprintf(stderr,
+		"-r <retransmissionTimeout>: maximum time for acknowledgment to arrive to the sender, default 500\n");
+	fprintf(stderr,
 		"-d <#>: emulate link-layer losses by dropping sent packet, expressed in percentage of drop (from 0 to 100). Default is 0\n");
 	fprintf(stderr,
 		"-b <#>: average burst size. GE model for losses. Default is 1 if -d set\n");
@@ -111,6 +115,8 @@ int main(int argc, char *argv[])
 	char buf[BUFSIZE];
 	char remote_ip[16] = "";	/* dotted quad IP string */
 	unsigned short int port = 30001;
+	int maxwin = 8; 	/*integer maximum size of the sending window */
+	int timeout = 500; 	/*retransmission timout in ms*/ 
 	int cliserv = -1;	/* must be specified on cmd line */
 	int plr = 0;
 	int avg_burst = 1;
@@ -143,6 +149,12 @@ int main(int argc, char *argv[])
 			break;
 		case 'p':
 			port = atoi(optarg);
+			break;
+		case 'w':
+			maxwin = atoi(optarg);
+			break;
+		case 'r':
+			timeout = atoi(optarg);
 			break;
 		case 'd':
 			plr = atoi(optarg);
@@ -288,7 +300,7 @@ int main(int argc, char *argv[])
 
 		if (FD_ISSET(tun_fd, &fdset)) {	/* There is something to read on tun_fd */
 
-			if (right_win < left_win + MAXWIN) {	/* if we did not send the full window */
+			if (right_win < left_win + maxwin) {	/* if we did not send the full window */
 
 				l = read(tun_fd, buf, sizeof(buf));
 				if (l < 0)
@@ -311,7 +323,7 @@ int main(int argc, char *argv[])
 				stats.rw = right_win;
 			}
 
-			if (right_win == left_win + MAXWIN) {	/* window full : retransmit non-acked packets in timeout */
+			if (right_win == left_win + maxwin) {	/* window full : retransmit non-acked packets in timeout */
 				window_not_full = false;
 
 				for (int i = left_win; i < right_win; i++) {
@@ -319,7 +331,8 @@ int main(int argc, char *argv[])
 						stats_buffer(p_pkt_list, &stats);
 					}
 					timeout_retransmit(sock_fd, from,
-							   p_pkt_list, i, &stats);
+							   timeout, p_pkt_list, i, &stats);
+					
 					left_win = clean_buffer(p_pkt_list, left_win, right_win, &stats);	/* remove all consecutive acked packets from the sending buffer */
 					stats.lw = left_win;
 				}
