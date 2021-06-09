@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 	progname = argv[0];
 
 	/* Check command line options */
-	while ((option = getopt(argc, argv, "i:sc:p:d:b:t:h")) > 0) {
+	while ((option = getopt(argc, argv, "i:sc:p:w:r:d:b:t:h")) > 0) {
 		switch (option) {
 		case 'h':
 			usage();
