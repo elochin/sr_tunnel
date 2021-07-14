@@ -66,4 +66,4 @@ sudo ip tuntap add mode tun tun0
 sudo ip link set tun0 up
 sudo ip addr add 192.168.10.2/24 dev tun0
 ```
-First launch `bin/sr_tunnel -i tun0 -s` on the server side and `bin/sr_tunnel -i tun0 -c W.X.Y.Z where W.X.Y.Z is the server IP address (e.g. the IP address associated to `eth0` for instance, not the `tun0` IP address).
+First launch `bin/sr_tunnel -i tun0 -s` on the server side and `bin/sr_tunnel -i tun0 -c W.X.Y.Z` where W.X.Y.Z is the server IP address (e.g. the IP address associated to `eth0` for instance, not the `tun0` IP address).
