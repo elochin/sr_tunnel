@@ -25,8 +25,8 @@
 #define BUFSIZE 1500   	/**< buffer for reading from tun interface, must be >= 1500 */
 #define CLIENT 0
 #define SERVER 1
-#define PKT 12345
-#define ACK 54321
+#define PKT 0x50
+#define ACK 0x41
 #define MAXWIN 8	/**< maximum SR window */
 #define TIMEOUT 500	/**< timeout expressed in ms */
 
@@ -34,7 +34,7 @@
   * Network PDU structure sent over the network
   */
 struct PDU {
-    int type;
+    char type;		/**< ACK or PKT */
     int seqnum;
     int length;
     char data[BUFSIZE];
