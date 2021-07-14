@@ -34,7 +34,7 @@ void send_packet(int sock_fd, struct sockaddr_in sout, char buf[BUFSIZE],
 }
 
 void timeout_retransmit(int sock_fd, struct sockaddr_in sout,
-			int timeout, linked_list_PDU * p_pkt_list, int seqnum, struct mystats *stats)
+			linked_list_PDU * p_pkt_list, int seqnum, struct mystats *stats)
 {
 	struct cell_PDU cell;
 	struct timeval now;
@@ -49,7 +49,7 @@ void timeout_retransmit(int sock_fd, struct sockaddr_in sout,
 	    && (now.tv_sec - cell.sent_at.tv_sec) * 1000000L + (now.tv_usec -
 								cell.sent_at.
 								tv_usec) >
-	    timeout * 1000L) {
+	    TIMEOUT * 1000L) {
 		memset(&data_pkt, 0, sizeof(data_pkt));
 		data_pkt.type = PKT;	// build the retransmission 
 		data_pkt.seqnum = cell.seqnum;
