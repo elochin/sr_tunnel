@@ -1,7 +1,7 @@
 CC=clang
 
 DEBUG = -DDEBUG
-CFLAGS= -g -Wall -I ./include
+CFLAGS= -Wall -I ./include
 
 all: bin clean sr_tunnel buffer
 

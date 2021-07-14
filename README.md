@@ -44,13 +44,13 @@ As soon as compiled, launch `bin/pss -h` for usage (see below):
 -h: prints this help text
 ```
 
+## 4. How to edit default SR parameters
+
 You can change SR window and timeoity value in `include/util.h` : 
 ```
 #define MAXWIN 8        /**< maximum SR window */
 #define TIMEOUT 500     /**< timeout expressed in ms */
 ```
-
-## 4. 
 
 ## 5. Practical usecase with TUN/TAP
 

@@ -22,7 +22,7 @@ void enqueue_packet(linked_list_PDU *p_pkt_list, char buf[BUFSIZE], int seqnum, 
     memcpy (p_new_cell->data, buf, length);
     p_new_cell->next  = *p_pkt_list;
     *p_pkt_list = p_new_cell;
-#ifdef DEBUG_LL
+#ifdef DEBUG
     fprintf(fp, "enqueue_packet(%d) size %d acked %d\n", pkt_to_buf.seqnum, pkt_to_buf.length, pkt_to_buf.acked );
 #endif
 }
@@ -64,7 +64,7 @@ cell_PDU get_packet(linked_list_PDU *p_list, int seqnum) {
         if (p_current_cell->seqnum != seqnum) {
             p_current_cell = p_current_cell->next;
          } else {
-#ifdef DEBUG_LL
+#ifdef DEBUG
             printf("get_packet(%d)\n", p_current_cell->seqnum);
 #endif
             return *p_current_cell;
@@ -82,7 +82,7 @@ void settime(linked_list_PDU *p_list, int seqnum, struct timeval now) {
          } else {
             p_current_cell->sent_at.tv_sec = now.tv_sec;
             p_current_cell->sent_at.tv_usec = now.tv_usec;
-#ifdef DEBUG_LL
+#ifdef DEBUG
             printf("settime(%d)\n", p_current_cell->seqnum);
 #endif
             break;
@@ -98,7 +98,7 @@ void setacked(linked_list_PDU *p_list, int seqnum) {
             p_current_cell = p_current_cell->next;
          } else {
             p_current_cell->acked = true;
-#ifdef DEBUG_LL
+#ifdef DEBUG
             fprintf(fp, "setacked(%d)\n", p_current_cell->seqnum);
 #endif
             break;
@@ -138,13 +138,13 @@ int pop_packet(linked_list_PDU *p_list, int seqnum) {
         if (p_previous_cell != NULL) {
             p_previous_cell->next = p_current_cell->next;
             free(p_current_cell);
-#ifdef DEBUG_LL
+#ifdef DEBUG
             printf("pop_packet(%d)\n", p_current_cell->seqnum);
 #endif
         }
         return 1;
     } else {
-#ifdef DEBUG_LL
+#ifdef DEBUG
         printf("pop_packet(%d) failed\n", p_current_cell->seqnum);
 #endif
         return 0;
