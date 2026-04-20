@@ -272,8 +272,6 @@ int main(int argc, char *argv[])
 	linked_list_PDU *p_pkt_list = &pkt_list;
 	nil(p_pkt_list);
 
-	bool window_not_full = true;
-
 	while (1) {
 
 		maxfd = (tun_fd > sock_fd) ? tun_fd : sock_fd;	/* use select() to handle both TUN and SOCKET descriptors at once */
@@ -312,8 +310,6 @@ int main(int argc, char *argv[])
 			}
 
 			if (right_win == left_win + MAXWIN) {	/* window full : retransmit non-acked packets in timeout */
-				window_not_full = false;
-
 				for (int i = left_win; i < right_win; i++) {
 					if (trace) {
 						stats_buffer(p_pkt_list, &stats);
